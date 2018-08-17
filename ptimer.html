@@ -1,0 +1,219 @@
+<html>
+    <head>
+    <title>Pomodoro Timer</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Khand|Orbitron" rel="stylesheet">
+
+    <style type="text/css">
+        @keyframes start {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        body {
+            background-color: #3d093f;
+        }
+
+        p {
+            color: white;
+            font-weight: 100;
+            font-size: 70%;
+            text-align: center;
+        }
+
+        #mainCont {
+            animation-name: start;
+            animation-duration: 3s;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        #timeDiv {
+            font-size: 200%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #whatToDo {
+            font-size: 200%;
+            border-top: 1px;
+            font-family: 'Khand', sans-serif;
+        }
+
+        #iterationsDiv {
+            border-bottom: 1px;
+            border-top: 1px;
+            font-family: 'Khand', sans-serif;
+        }
+
+        #buttonsDiv {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .commonDiv {
+            background-color: dimgrey;
+            color: white;
+            border: 2px solid lightgray;
+        }
+
+        #startButton {
+            border-top-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            font-family: 'Khand', sans-serif;
+        }
+
+        #resetButton {
+            border-top-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            font-family: 'Khand', sans-serif;
+        }
+
+        .iterationButton {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: bolder;
+            border: 1px solid lightgray;
+            border-radius: 4px;
+            margin: 4px;
+        }
+
+        .controlButtons {
+            flex-grow: 1;
+            text-align: center;
+            border: 1px solid lightgray;
+            margin: 4;
+        }
+
+        .controlButtons:hover {
+            color: black;
+            background-color: white;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .container {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-content: center;
+            flex-wrap: nowrap;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="mainCont" class="container center">
+        <div id="timeDiv" class="center commonDiv">00:00</div>
+        <div id="whatToDo" class="center container commonDiv">Click Start</div>
+        <div id="iterationsDiv" class="center container commonDiv">
+            <div id="itOne" class="iterationButton">One</div>
+            <div id="itTwo" class="iterationButton">Two</div>
+            <div id="itThree" class="iterationButton">Three</div>
+        </div>
+        <div id="buttonsDiv" class="center container commonDiv"><input type="button" id="startButton" class="controlButtons" value="Start"><input type="button" id="resetButton" class="controlButtons" value="Reset"></div>
+        <p>Pomodoro Coding Timer<br> Click 'Start' to start the timer and do three iterations of 25 minute coding with 5 minute rest intervals. After three iterations take a 15-30 minute break and then restart the timer. 'Reset' will reset the timer to first iteration.</p>
+    </div>
+    
+    <audio id="endSound">
+        <source src="BELL.WAV" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script type="text/javascript">
+        var mySound = document.getElementById("endSound");
+        var codeTime = 1500000;
+        var shortRest = 300000;
+        var work = true;
+        var counting = true;
+        var iteration = 0;
+
+        document.getElementById("resetButton").onclick = function() {
+            location.reload();
+        }
+
+        document.getElementById("startButton").onclick = function() {
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("whatToDo").innerHTML = "> doNow(code) <";
+            iteration++;
+            Timer(codeTime);
+        }
+
+        function Timer(duration) {
+            counting = true;
+            var startTime = new Date().getTime();
+            var x = setInterval(function() {
+                var currentTime = new Date().getTime();
+                var runningTime = currentTime - startTime;
+                var timeLeft = duration - runningTime;
+                var minutes = Math.floor(timeLeft / 60000);
+                var seconds = Math.floor(timeLeft % 60000 / 1000);
+                if (seconds < 10) {
+                    var dispSeconds = "0" + seconds
+                } else {
+                    var dispSeconds = seconds
+                }
+
+                document.getElementById("timeDiv").innerHTML = minutes + ":" + dispSeconds + "";
+                if (timeLeft < 500) {
+                    mySound.play();
+                    counting = false;
+                    work = !work;
+                    clearInterval(x);
+                    switch (iteration) {
+
+                        case 1:
+                            document.getElementById("itOne").style.backgroundColor = "white";
+                            document.getElementById("itOne").style.color = "dimGray";
+
+                            break;
+                        case 2:
+                            document.getElementById("itTwo").style.backgroundColor = "white";
+                            document.getElementById("itTwo").style.color = "dimGray";
+
+                            break;
+
+                        case 3:
+                            document.getElementById("itThree").style.backgroundColor = "white";
+                            document.getElementById("itThree").style.color = "dimGray";
+
+                            break;
+                    }
+
+                    if (iteration == 3) {
+                        alert("Three itterations done ! Time for a 15-30 min break ! ");
+                        location.reload();
+                    }
+                    if (work && counting == false) {
+                        document.getElementById("whatToDo").innerHTML = "> doNow(code) <";
+                        iteration++;
+                        Timer(codeTime)
+                    }
+                    if (work == false && counting == false) {
+                        document.getElementById("whatToDo").innerHTML = "< doNow(rest)";
+                        Timer(shortRest);
+                    }
+                }
+            }, 500)
+        }
+    </script>
+
+</body>
+
+
+</html>
