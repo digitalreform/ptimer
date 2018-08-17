@@ -13,5 +13,5 @@ USAGE:
 
 ptimer is a simple online timer for the Pomodoro Technique to be used by coders/developers.
 
-Simply open the page, click Start and the timer will start counting down.
+Simply open the page or ptimer.html file, click Start and the timer will start counting down.
 You will be notified when to take a five minute break. After the break you will be notified to start working again. After three 25 minute coding intervals, it is recommended to take a longer 15 min break. When you come back just click Reset or Reload the page and start again
