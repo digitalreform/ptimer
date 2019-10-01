@@ -1,6 +1,9 @@
 # ptimer
 A simple Online Pomodoro Timer for coding
 
+*BACKGROUND:
+This is the first web app I coded when I started Web Development. The idea was to use this Pomodoro Timer while learning more in depth web development. It was coded using standard HTML, CSS and Vanilla JS. This code will n ot be refined or changed, but you are welcome to use it any way you please.*
+
 INTRODUCTION:
 
 From Wikipedia, the free encyclopedia
